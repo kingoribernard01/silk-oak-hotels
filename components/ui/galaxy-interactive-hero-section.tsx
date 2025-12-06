@@ -11,7 +11,7 @@ function HeroBackground() {
         <img 
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=3840&auto=format&fit=crop" 
           alt="Silk Oak Luxury Hotel" 
-          className="w-full h-full object-cover object-center animate-slow-zoom" // Assuming we might add a slow zoom animation class globally or just static
+          className="w-full h-full object-cover object-center animate-slow-zoom" 
           style={{ animation: 'subtleZoom 20s infinite alternate' }}
         />
         {/* Elegant Dark Overlay for Text Readability */}
@@ -96,7 +96,7 @@ function Navbar() {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-transparent ${
+      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 border-b border-transparent ${
         isScrolled 
           ? 'bg-charcoal-900/95 backdrop-blur-md py-3 shadow-2xl border-white/5' 
           : 'bg-transparent py-6'
@@ -190,7 +190,7 @@ export const HeroSection = () => {
       </div>
       
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer text-white/50 hover:text-gold-400 transition-colors">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center animate-bounce cursor-pointer text-white/50 hover:text-gold-400 transition-colors" onClick={() => document.getElementById('about')?.scrollIntoView({behavior:'smooth'})}>
         <span className="text-[10px] uppercase tracking-[0.3em] mb-2">Scroll</span>
         <ChevronDown className="w-5 h-5" />
       </div>
