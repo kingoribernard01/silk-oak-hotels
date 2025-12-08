@@ -28,7 +28,7 @@ function HeroBackground() {
   );
 }
 
-function HeroContent() {
+function HeroContent({ onBookNow }: { onBookNow?: () => void }) {
   return (
     <div className="relative z-10 text-left text-white pt-32 md:pt-48 px-4 max-w-5xl mx-auto md:ml-0 animate-fade-in-up">
       <div className="inline-flex items-center space-x-2 py-1 px-4 border border-white/20 rounded-full bg-white/5 backdrop-blur-md mb-6 shadow-lg">
@@ -47,7 +47,7 @@ function HeroContent() {
       
       <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
         <button 
-          onClick={() => document.getElementById('contact')?.scrollIntoView({behavior: 'smooth'})} 
+          onClick={onBookNow} 
           className="group relative w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-gold-600 to-gold-500 text-white font-bold rounded-xl shadow-xl hover:shadow-gold-500/30 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 overflow-hidden"
         >
           <span className="relative z-10 uppercase tracking-widest text-sm flex items-center justify-center">
@@ -68,7 +68,7 @@ function HeroContent() {
   );
 }
 
-function Navbar() {
+function Navbar({ onBookNow }: { onBookNow?: () => void }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -144,7 +144,7 @@ function Navbar() {
           </a>
           
           <button 
-            onClick={() => scrollTo('contact')} 
+            onClick={onBookNow} 
             className="hidden sm:block bg-gold-500 hover:bg-gold-600 text-white font-bold py-3 px-6 rounded-lg text-xs uppercase tracking-widest shadow-lg shadow-gold-500/20 transition-all duration-300 hover:scale-105"
           >
             Book Now
@@ -171,7 +171,13 @@ function Navbar() {
                 {link.name}
              </button>
           ))}
-          <button onClick={() => scrollTo('contact')} className="w-full bg-gold-500 text-white font-bold py-4 rounded-lg mt-4 uppercase tracking-widest">
+          <button 
+            onClick={() => {
+              if (onBookNow) onBookNow();
+              setIsMobileMenuOpen(false);
+            }} 
+            className="w-full bg-gold-500 text-white font-bold py-4 rounded-lg mt-4 uppercase tracking-widest"
+          >
             Book A Room
           </button>
         </div>
@@ -180,13 +186,13 @@ function Navbar() {
   );
 }
 
-export const HeroSection = () => {
+export const HeroSection = ({ onBookNow }: { onBookNow?: () => void }) => {
   return (
     <div className="relative h-screen min-h-[700px] w-full bg-charcoal-900">
-      <Navbar />
+      <Navbar onBookNow={onBookNow} />
       <HeroBackground />
       <div className="container mx-auto h-full flex items-center relative px-4 md:px-8">
-        <HeroContent />
+        <HeroContent onBookNow={onBookNow} />
       </div>
       
       {/* Scroll Indicator */}

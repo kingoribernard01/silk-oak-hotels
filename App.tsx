@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { HeroSection } from './components/ui/galaxy-interactive-hero-section';
-import { Star, Coffee, Wifi, Car, Monitor, Trophy, GlassWater, Bed, MapPin, Phone, Mail, Calendar, CheckCircle, Facebook, Instagram, Twitter, ArrowRight, MessageCircle, Send, Loader2 } from 'lucide-react';
+import { Star, Coffee, Wifi, Car, Monitor, Trophy, GlassWater, Bed, MapPin, Phone, Mail, Calendar, CheckCircle, Facebook, Instagram, Twitter, ArrowRight, MessageCircle, Send, Loader2, Clock, Globe, X } from 'lucide-react';
 
 // --- Animation Helper ---
-const FadeIn = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => {
+const FadeIn = ({ children, delay = 0, className = "" }: { children?: React.ReactNode, delay?: number, className?: string }) => {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -161,11 +161,13 @@ const PackageCard = ({ title, features, featured = false, price, delay }: { titl
   </FadeIn>
 );
 
-// --- Booking Form Component ---
-const BookingForm = () => {
+// --- Modern Contact & Booking Form ---
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    email: '',
+    inquiryType: 'Room Booking',
     location: 'Kasarani Branch',
     message: ''
   });
@@ -181,7 +183,7 @@ const BookingForm = () => {
     setIsSubmitting(true);
     
     // Construct the WhatsApp message
-    const text = `Hello Silk Oak Hotels,\n\nI would like to make a booking inquiry:\n\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Preferred Location:* ${formData.location}\n*Request:* ${formData.message || 'No special requests'}`;
+    const text = `*New Inquiry via Website*\n\n*Type:* ${formData.inquiryType}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'Not provided'}\n*Location:* ${formData.location}\n\n*Message:*\n${formData.message || 'No details provided'}`;
     const encodedText = encodeURIComponent(text);
     const whatsappUrl = `https://wa.me/254725227711?text=${encodedText}`;
     
@@ -190,7 +192,7 @@ const BookingForm = () => {
         window.open(whatsappUrl, '_blank');
         setIsSubmitting(false);
         setShowSuccess(true);
-        setFormData({ name: '', phone: '', location: 'Kasarani Branch', message: '' }); // Reset form
+        setFormData({ name: '', phone: '', email: '', inquiryType: 'Room Booking', location: 'Kasarani Branch', message: '' }); // Reset form
         
         // Hide success message after 5 seconds
         setTimeout(() => setShowSuccess(false), 5000);
@@ -198,32 +200,32 @@ const BookingForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 relative">
+    <form onSubmit={handleSubmit} className="space-y-5 relative">
       {showSuccess && (
-        <div className="absolute inset-0 z-10 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center rounded-lg animate-fade-in-up">
+        <div className="absolute inset-0 z-20 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center rounded-xl animate-fade-in-up border border-green-100 shadow-lg">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
             </div>
             <h4 className="text-xl font-bold text-charcoal-900 mb-2">Inquiry Sent!</h4>
-            <p className="text-gray-500 text-center px-6">Opening WhatsApp to complete your booking...</p>
+            <p className="text-gray-500 text-center px-6 text-sm">We are opening WhatsApp to finalize your request.</p>
         </div>
       )}
     
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-charcoal-600 uppercase tracking-wider">Your Name</label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Your Name</label>
           <input 
             required
             name="name"
             value={formData.name}
             onChange={handleChange}
             type="text" 
-            placeholder="John Doe" 
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-all placeholder:text-gray-300 font-medium" 
+            placeholder="Jane Doe" 
+            className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium placeholder:text-gray-300" 
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-charcoal-600 uppercase tracking-wider">Phone Number</label>
+        <div className="space-y-1">
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone Number</label>
           <input 
             required
             name="phone"
@@ -231,68 +233,242 @@ const BookingForm = () => {
             onChange={handleChange}
             type="tel" 
             placeholder="+254 7..." 
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-all placeholder:text-gray-300 font-medium" 
+            className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium placeholder:text-gray-300" 
           />
         </div>
       </div>
-      <div className="space-y-2">
-          <label className="text-xs font-bold text-charcoal-600 uppercase tracking-wider">Select Location</label>
-          <div className="relative">
-            <select 
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-all text-gray-700 appearance-none cursor-pointer font-medium"
-            >
-              <option>Kasarani Branch</option>
-              <option>Utawala Branch</option>
-              <option>Duruma Road CBD</option>
-            </select>
-            <MapPin className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-          </div>
+
+      <div className="space-y-1">
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+          <input 
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            type="email" 
+            placeholder="jane@example.com" 
+            className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium placeholder:text-gray-300" 
+          />
       </div>
-      <div className="space-y-2">
-          <label className="text-xs font-bold text-charcoal-600 uppercase tracking-wider">Message / Special Requests</label>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+         <div className="space-y-1">
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Inquiry Type</label>
+            <div className="relative">
+              <select 
+                name="inquiryType"
+                value={formData.inquiryType}
+                onChange={handleChange}
+                className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium text-gray-700 appearance-none cursor-pointer"
+              >
+                <option>Room Booking</option>
+                <option>Event/Conference</option>
+                <option>Restaurant Reservation</option>
+                <option>General Inquiry</option>
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                <ArrowRight className="w-4 h-4 rotate-90" />
+              </div>
+            </div>
+        </div>
+        <div className="space-y-1">
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Branch</label>
+            <div className="relative">
+              <select 
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium text-gray-700 appearance-none cursor-pointer"
+              >
+                <option>Kasarani Branch</option>
+                <option>Utawala Branch</option>
+                <option>Duruma Road CBD</option>
+                <option>Head Office</option>
+              </select>
+              <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            </div>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Message</label>
           <textarea 
             name="message"
             value={formData.message}
             onChange={handleChange}
             rows={4} 
-            placeholder="I would like to book a double room for..." 
-            className="w-full p-4 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-all placeholder:text-gray-300 resize-none font-medium"
+            placeholder="Tell us more about your needs..." 
+            className="w-full p-3.5 bg-gray-50 border-b-2 border-transparent focus:border-gold-500 rounded-t-md focus:bg-white focus:shadow-md transition-all outline-none font-medium placeholder:text-gray-300 resize-none"
           ></textarea>
       </div>
       
       <button 
         type="submit" 
         disabled={isSubmitting}
-        className="w-full bg-charcoal-900 hover:bg-gold-500 hover:text-white text-white font-bold py-5 rounded-lg uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-gold-500/20 transform hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+        className="w-full bg-charcoal-900 hover:bg-gold-500 hover:text-white text-white font-bold py-4 rounded-lg uppercase tracking-widest transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-gold-500/20 transform hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed mt-2"
       >
         {isSubmitting ? (
              <>
                <Loader2 className="w-5 h-5 animate-spin" />
-               Processing...
+               Sending...
              </>
         ) : (
              <>
                <Send className="w-4 h-4" />
-               Send Booking Inquiry
+               Send Message
              </>
         )}
       </button>
-      <p className="text-center text-xs text-gray-400 mt-4">
-        This will open WhatsApp to send your details directly to our reservations team.
+      <p className="text-center text-[10px] text-gray-400 mt-2">
+        This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.
       </p>
     </form>
+  );
+};
+
+// --- Booking Modal ---
+const BookingModal = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    inquiryType: 'Room Booking',
+    location: 'Kasarani Branch',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Construct the WhatsApp message
+    const text = `*Quick Booking Request*\n\n*Type:* ${formData.inquiryType}\n*Name:* ${formData.name}\n*Phone:* ${formData.phone}\n*Email:* ${formData.email || 'Not provided'}\n*Location:* ${formData.location}\n\n*Message:*\n${formData.message || 'No details provided'}`;
+    const encodedText = encodeURIComponent(text);
+    const whatsappUrl = `https://wa.me/254725227711?text=${encodedText}`;
+    
+    setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+        setIsSubmitting(false);
+        setShowSuccess(true);
+        setFormData({ name: '', phone: '', email: '', inquiryType: 'Room Booking', location: 'Kasarani Branch', message: '' }); 
+        
+        // Auto close after success
+        setTimeout(() => {
+          setShowSuccess(false);
+          onClose();
+        }, 3000);
+    }, 1000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-charcoal-900/80 backdrop-blur-sm transition-opacity" 
+        onClick={onClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+        {/* Header */}
+        <div className="bg-charcoal-900 text-white p-6 flex items-center justify-between">
+          <div>
+            <h3 className="text-2xl font-serif font-bold">Book Your Stay</h3>
+            <p className="text-gold-400 text-xs uppercase tracking-widest mt-1">Quick Reservation</p>
+          </div>
+          <button onClick={onClose} className="p-2 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
+            <X className="w-5 h-5 text-white" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 md:p-8 relative">
+           {showSuccess && (
+            <div className="absolute inset-0 z-20 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center animate-fade-in-up">
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                    <CheckCircle className="w-8 h-8 text-green-600" />
+                </div>
+                <h4 className="text-xl font-bold text-charcoal-900 mb-2">Request Sent!</h4>
+                <p className="text-gray-500 text-center px-6 text-sm">Proceeding to WhatsApp...</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Name</label>
+                <input required name="name" value={formData.name} onChange={handleChange} className="w-full p-3 bg-gray-50 border border-gray-100 focus:border-gold-500 rounded-lg outline-none text-sm transition-colors" placeholder="Full Name" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Phone</label>
+                <input required name="phone" value={formData.phone} onChange={handleChange} className="w-full p-3 bg-gray-50 border border-gray-100 focus:border-gold-500 rounded-lg outline-none text-sm transition-colors" placeholder="Phone Number" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Location</label>
+                  <select name="location" value={formData.location} onChange={handleChange} className="w-full p-3 bg-gray-50 border border-gray-100 focus:border-gold-500 rounded-lg outline-none text-sm text-gray-700 cursor-pointer transition-colors appearance-none">
+                    <option>Kasarani Branch</option>
+                    <option>Utawala Branch</option>
+                    <option>Duruma Road CBD</option>
+                  </select>
+               </div>
+               <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Type</label>
+                  <select name="inquiryType" value={formData.inquiryType} onChange={handleChange} className="w-full p-3 bg-gray-50 border border-gray-100 focus:border-gold-500 rounded-lg outline-none text-sm text-gray-700 cursor-pointer transition-colors appearance-none">
+                    <option>Room Booking</option>
+                    <option>Event/Conference</option>
+                    <option>Restaurant</option>
+                  </select>
+               </div>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Message (Optional)</label>
+              <textarea name="message" value={formData.message} onChange={handleChange} rows={3} className="w-full p-3 bg-gray-50 border border-gray-100 focus:border-gold-500 rounded-lg outline-none text-sm transition-colors resize-none" placeholder="Special requests, dates, etc..." />
+            </div>
+
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="w-full bg-gold-500 hover:bg-gold-600 text-white font-bold py-3.5 rounded-lg uppercase tracking-widest transition-all duration-300 shadow-lg hover:shadow-gold-500/20 flex items-center justify-center gap-2 mt-2"
+            >
+              {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Book Now"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
 // --- Main App ---
 
 export default function App() {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-beige-50 font-sans selection:bg-gold-200 selection:text-charcoal-900">
-      <HeroSection />
+      <HeroSection onBookNow={() => setIsBookingModalOpen(true)} />
+      
+      <BookingModal isOpen={isBookingModalOpen} onClose={() => setIsBookingModalOpen(false)} />
       
       <FloatingWhatsApp />
 
@@ -496,63 +672,87 @@ export default function App() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-24 md:py-32 bg-beige-50 relative overflow-hidden">
+      {/* NEW Modern Contact Section */}
+      <section id="contact" className="py-24 md:py-32 bg-charcoal-900 relative overflow-hidden">
         {/* Abstract Background Decoration */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-gold-200 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gold-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+            {/* Using a subtle map-like abstract image or pattern */}
+             <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2000&auto=format&fit=crop" className="w-full h-full object-cover filter grayscale contrast-150" alt="Map Background" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-charcoal-950 via-charcoal-900/95 to-charcoal-900/90"></div>
         
         <div className="container mx-auto px-4 md:px-8 relative z-10">
           <FadeIn>
-          <div className="bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row border border-gray-100">
+          <div className="max-w-6xl mx-auto bg-white/5 backdrop-blur-lg rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex flex-col lg:flex-row">
             
-            {/* Contact Info */}
-            <div className="p-10 md:p-16 lg:w-5/12 bg-charcoal-900 text-white flex flex-col justify-center relative overflow-hidden">
-               <div className="absolute inset-0 bg-gold-500/10 pattern-dots opacity-30"></div>
-               <h3 className="text-3xl font-serif font-bold mb-6 text-white relative z-10">Get in Touch</h3>
-               <p className="text-gray-300 mb-12 leading-relaxed relative z-10">
-                 Ready to experience Silk Oak? Contact our central reception or any of our branches directly. We look forward to hosting you.
-               </p>
-               
-               <div className="space-y-8 relative z-10">
-                 <div className="flex items-start group">
-                   <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
-                     <Phone className="w-5 h-5 text-gold-400 group-hover:text-white" />
+            {/* Contact Info (Darker Glass Side) */}
+            <div className="p-10 md:p-14 lg:w-5/12 flex flex-col relative">
+               <div className="absolute inset-0 bg-charcoal-950/50"></div>
+               <div className="relative z-10 h-full flex flex-col">
+                   <div className="mb-12">
+                       <h3 className="text-3xl font-serif font-bold text-white mb-4">Get in Touch</h3>
+                       <p className="text-gray-400 font-light leading-relaxed">
+                         Whether you have a question about our features, pricing, need a demo, or anything else, our team is ready to answer all your questions.
+                       </p>
                    </div>
-                   <div>
-                     <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Call Us</p>
-                     <p className="text-xl font-medium tracking-wide">0725 227 711</p>
+                   
+                   <div className="space-y-8 flex-grow">
+                     <a href="tel:0725227711" className="flex items-start group transition-transform hover:translate-x-2 duration-300">
+                       <div className="w-12 h-12 rounded-lg bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
+                         <Phone className="w-5 h-5 text-gold-400 group-hover:text-charcoal-900" />
+                       </div>
+                       <div>
+                         <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Call Us 24/7</p>
+                         <p className="text-xl text-white font-medium tracking-wide group-hover:text-gold-400 transition-colors">0725 227 711</p>
+                       </div>
+                     </a>
+
+                     <a href="mailto:reception@silkoak.co.ke" className="flex items-start group transition-transform hover:translate-x-2 duration-300">
+                        <div className="w-12 h-12 rounded-lg bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
+                          <Mail className="w-5 h-5 text-gold-400 group-hover:text-charcoal-900" />
+                        </div>
+                       <div>
+                         <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Email Us</p>
+                         <p className="text-lg text-white font-medium tracking-wide group-hover:text-gold-400 transition-colors">reception@silkoak.co.ke</p>
+                       </div>
+                     </a>
+
+                     <div className="flex items-start group transition-transform hover:translate-x-2 duration-300">
+                        <div className="w-12 h-12 rounded-lg bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
+                          <MapPin className="w-5 h-5 text-gold-400 group-hover:text-charcoal-900" />
+                        </div>
+                       <div>
+                         <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Head Office</p>
+                         <p className="text-lg text-white tracking-wide">Nairobi, Kenya</p>
+                         <p className="text-sm text-gray-500 mt-1">Kasarani • Utawala • CBD</p>
+                       </div>
+                     </div>
                    </div>
-                 </div>
-                 <div className="flex items-start group">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
-                      <Mail className="w-5 h-5 text-gold-400 group-hover:text-white" />
-                    </div>
-                   <div>
-                     <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Email</p>
-                     <p className="text-lg font-medium tracking-wide">reception@silkoak.co.ke</p>
+
+                   <div className="mt-12 pt-8 border-t border-white/10">
+                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Working Hours</h4>
+                        <div className="flex items-center text-sm text-gray-300 gap-6">
+                            <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4 text-gold-500" />
+                                <span>Reception: 24/7</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Globe className="w-4 h-4 text-gold-500" />
+                                <span>Online Booking: 24/7</span>
+                            </div>
+                        </div>
                    </div>
-                 </div>
-                 <div className="flex items-start group">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mr-5 group-hover:bg-gold-500 transition-colors duration-300 flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-gold-400 group-hover:text-white" />
-                    </div>
-                   <div>
-                     <p className="text-xs text-gold-400 uppercase tracking-widest font-bold mb-1">Headquarters</p>
-                     <p className="text-lg tracking-wide">Nairobi, Kenya</p>
-                   </div>
-                 </div>
                </div>
             </div>
 
-            {/* Booking Form */}
-            <div className="p-10 md:p-16 lg:w-7/12 bg-white">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-3xl font-serif font-bold text-charcoal-900">Book A Room</h3>
-                <span className="px-3 py-1 bg-gold-100 text-gold-700 text-xs font-bold uppercase rounded-sm tracking-wider">Online Request</span>
+            {/* Booking/Contact Form (Light Side) */}
+            <div className="p-10 md:p-14 lg:w-7/12 bg-white relative">
+              <div className="mb-8">
+                <h3 className="text-2xl font-serif font-bold text-charcoal-900 mb-2">Send us a Message</h3>
+                <p className="text-gray-500 text-sm">Fill out the form below and we'll get back to you shortly.</p>
               </div>
               
-              <BookingForm />
+              <ContactForm />
             </div>
           </div>
           </FadeIn>
